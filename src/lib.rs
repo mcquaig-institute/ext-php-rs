@@ -162,6 +162,8 @@
 //! }
 //! ```
 //!
+//! See the documentation for [`FunctionBuilder`] and [`parse_args!`] for more details.
+//!
 //! ## Global Constants
 //!
 //! Constants must be registered in the module startup function. Registering constants is provided
@@ -191,6 +193,8 @@
 //!
 //! [`IntoConst`]: crate::php::constants::IntoConst
 //! [`ModuleBuilder`]: crate::php::module::ModuleBuilder
+//! [`FunctionBuilder`]: crate::php::function::FunctionBuilder
+//! [`parse_args!`]: crate::parse_args
 
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
