@@ -203,4 +203,28 @@ pub mod errors;
 pub mod functions;
 pub mod php;
 
+/// Derives the implementation of `ZendObjectOverride` for the given object. Allows the
+/// object to be used as a Zend object, storing Rust information inside a PHP class.
+///
+/// The type that the macro is used on *must* implement the [`Default`] trait.
+///
+/// # Example
+///
+/// ```
+/// use ext_php_rs::{ZendObjectHandler, php::class::ClassBuilder};
+///
+/// #[derive(Default, ZendObjectHandler)]
+/// struct Class {
+///     x: i32,
+///     y: f64,
+///     z: String,
+/// }
+///
+/// pub extern "C" fn module_init(_type: i32, module_number: i32) -> i32 {
+///     ClassBuilder::new("TestClass")
+///         .object_override::<Class>()
+///         .build();
+///     0
+/// }
+/// ```
 pub use ext_php_rs_derive::ZendObjectHandler;

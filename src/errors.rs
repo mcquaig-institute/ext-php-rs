@@ -1,3 +1,5 @@
+//! Error and result types for the library.
+
 use std::{error::Error as ErrorTrait, fmt::Display};
 
 use crate::php::{enums::DataType, flags::ZvalTypeFlags};

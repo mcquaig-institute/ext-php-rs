@@ -1,3 +1,5 @@
+//! Traits and implementations for creating constants in PHP.
+
 use super::flags::GlobalConstantFlags;
 use crate::{
     bindings::{
@@ -7,6 +9,7 @@ use crate::{
     functions::c_str,
 };
 
+/// Implemented on types which can be converted into a PHP contant.
 pub trait IntoConst: Sized {
     /// Registers a global module constant in PHP, with the value as the content of self.
     /// This function _must_ be called in the module startup function, which is called after

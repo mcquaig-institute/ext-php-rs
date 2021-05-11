@@ -5,7 +5,6 @@ use syn::{parse_macro_input, DeriveInput};
 
 extern crate proc_macro;
 
-/// Derives the implementation of `ZendObjectOverride` for the given structure.
 #[proc_macro_derive(ZendObjectHandler)]
 pub fn object_handler_derive(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
