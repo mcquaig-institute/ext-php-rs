@@ -38,7 +38,7 @@ pub enum Error {
     InvalidPointer,
     /// The given property name does not exist.
     InvalidProperty,
-    /// Attempted to convert a number into another number, leading to an integer overflow.
+    /// Attempted to convert a number into a smaller type, leading to an integer overflow.
     IntegerOverflow,
 }
 
