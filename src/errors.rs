@@ -38,6 +38,8 @@ pub enum Error {
     InvalidPointer,
     /// The given property name does not exist.
     InvalidProperty,
+    /// Attempted to convert a number into another number, leading to an integer overflow.
+    IntegerOverflow,
 }
 
 impl Display for Error {
@@ -57,9 +59,15 @@ impl Display for Error {
             Error::InvalidTypeToDatatype(dt) => {
                 write!(f, "Type flags did not contain a datatype: {:?}", dt)
             }
+<<<<<<< HEAD
             Error::InvalidScope => write!(f, "Invalid scope."),
             Error::InvalidPointer => write!(f, "Invalid pointer."),
             Error::InvalidProperty => write!(f, "Property does not exist on object."),
+=======
+            Error::IntegerOverflow => {
+                write!(f, "Attempt to convert integer types lead to an overflow.")
+            }
+>>>>>>> 41af7ff46 (Registering constants returns a `Result`)
         }
     }
 }

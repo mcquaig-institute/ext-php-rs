@@ -6,8 +6,10 @@ use crate::{
         zend_register_bool_constant, zend_register_double_constant, zend_register_long_constant,
         zend_register_string_constant,
     },
+    errors::{Error, Result},
     functions::c_str,
 };
+use std::convert::TryInto;
 
 /// Implemented on types which can be converted into a PHP contant.
 pub trait IntoConst: Sized {
@@ -33,7 +35,7 @@ pub trait IntoConst: Sized {
     ///     0
     /// }
     /// ```
-    fn register_constant<N: AsRef<str>>(&self, name: N, module_number: i32) {
+    fn register_constant<N: AsRef<str>>(&self, name: N, module_number: i32) -> Result<()> {
         self.register_constant_flags(
             name,
             module_number,
@@ -69,7 +71,7 @@ pub trait IntoConst: Sized {
         name: N,
         module_number: i32,
         flags: GlobalConstantFlags,
-    );
+    ) -> Result<()>;
 }
 
 impl IntoConst for String {
@@ -78,9 +80,9 @@ impl IntoConst for String {
         name: N,
         module_number: i32,
         flags: GlobalConstantFlags,
-    ) {
+    ) -> Result<()> {
         self.as_str()
-            .register_constant_flags(name, module_number, flags);
+            .register_constant_flags(name, module_number, flags)
     }
 }
 
@@ -90,7 +92,7 @@ impl IntoConst for &str {
         name: N,
         module_number: i32,
         flags: GlobalConstantFlags,
-    ) {
+    ) -> Result<()> {
         let name = name.as_ref();
         unsafe {
             zend_register_string_constant(
@@ -101,6 +103,7 @@ impl IntoConst for &str {
                 module_number,
             )
         };
+        Ok(())
     }
 }
 
@@ -110,7 +113,7 @@ impl IntoConst for bool {
         name: N,
         module_number: i32,
         flags: GlobalConstantFlags,
-    ) {
+    ) -> Result<()> {
         let name = name.as_ref();
         unsafe {
             zend_register_bool_constant(
@@ -120,7 +123,8 @@ impl IntoConst for bool {
                 flags.bits() as _,
                 module_number,
             )
-        }
+        };
+        Ok(())
     }
 }
 
@@ -133,17 +137,18 @@ macro_rules! into_const_num {
                 name: N,
                 module_number: i32,
                 flags: GlobalConstantFlags,
-            ) {
+            ) -> Result<()> {
                 let name = name.as_ref();
                 unsafe {
                     $fn(
                         c_str(name),
                         name.len() as _,
-                        *self as _,
+                        (*self).try_into().map_err(|_| Error::IntegerOverflow)?,
                         flags.bits() as _,
                         module_number,
                     )
                 };
+                Ok(())
             }
         }
     };
