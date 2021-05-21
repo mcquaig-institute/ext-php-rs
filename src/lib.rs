@@ -191,9 +191,81 @@
 //!     .into_raw()
 //! ```
 //!
+//! ## Classes
+//!
+//! Classes must also be registered in the module startup function. The [`ClassBuilder`] is used
+//! for building classes. We can build a simple class called `TestClass` with one function called
+//! `TestClass::hello` and a constant `TestClass::TEST_CONST`:
+//!
+//! ```
+//! use ext_php_rs::php::{
+//!     execution_data::ExecutionData,
+//!     function::FunctionBuilder,
+//!     class::ClassBuilder,
+//!     flags::MethodFlags,
+//!     types::zval::Zval,
+//! };
+//!
+//! pub extern "C" fn hello(_: &mut ExecutionData, _: &mut Zval) {}
+//!
+//! pub extern "C" fn module_init(_type: i32, module_number: i32) -> i32 {
+//!     let hello = FunctionBuilder::new("hello", hello)
+//!         .build();
+//!
+//!     ClassBuilder::new("TestClass")
+//!         .method(hello, MethodFlags::Public)
+//!         .constant("TEST_CONST", "Constant!")
+//!         .build();
+//!     0
+//! }
+//! ```
+//!
+//! Methods are registered in the same way that functions are registered, however, they also have a
+//! visibility flag - one of `Public`, `Protected` or `Private`, similar to a normal PHP class.
+//!
+//! You will likely want to store some data with the class object. You can define a Rust type which
+//! will represent the class and pass it to PHP. The type *must* implement the [`Default`] trait,
+//! as well as implementing the [`ZendObjectOverride`] trait (which can be derived using the
+//! [`ZendObjectHandler`] macro):
+//!
+//! ```
+//! use ext_php_rs::php::{
+//!     ZendObjectHandler,
+//!     execution_data::ExecutionData,
+//!     function::FunctionBuilder,
+//!     class::ClassBuilder,
+//!     flags::MethodFlags,
+//!     types::zval::Zval,
+//! };
+//!
+//! #[derive(ZendObjectHandler)]
+//! struct MyClass {
+//!     a: i32,
+//!     b: i32,
+//!     c: String,
+//! }
+//!
+//! impl Default for MyClass {
+//!     fn default() -> Self {
+//!         Self {
+//!             a: 15,
+//!             b: 30,
+//!             c: "Hello".into(),
+//!         }
+//!     }
+//! }
+//!
+//! impl MyClass {
+//!     pub extern "C" fn constructor(ex: &mut ExecutionData, _: &mut Zval) {
+//!
+//!     }
+//! }
+//! ```
+//!
 //! [`IntoConst`]: crate::php::constants::IntoConst
 //! [`ModuleBuilder`]: crate::php::module::ModuleBuilder
 //! [`FunctionBuilder`]: crate::php::function::FunctionBuilder
+//! [`ClassBuilder`]: crate::php::class::ClassBuilder
 //! [`parse_args!`]: crate::parse_args
 
 #![allow(non_upper_case_globals)]
