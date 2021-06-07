@@ -48,13 +48,12 @@
 //! See the documentation for the [`ModuleBuilder`] class for more details.
 //!
 //! ```
-//! use ext_php_rs::{
-//!     info_table_start, info_table_row, info_table_end,
-//!     php::module::{
-//!         ModuleBuilder, ModuleEntry,
-//!     },
-//! };
-//!
+//! # use ext_php_rs::{
+//! #     info_table_start, info_table_row, info_table_end,
+//! #     php::module::{
+//! #         ModuleBuilder, ModuleEntry,
+//! #     },
+//! # };
 //! #[no_mangle]
 //! pub extern "C" fn get_module() -> *mut ModuleEntry {
 //!     ModuleBuilder::new("ext_name", "0.0.1")
@@ -87,20 +86,19 @@
 //! string, and returns a string.
 //!
 //! ```
-//! use ext_php_rs::{
-//!     parse_args,
-//!     php::{
-//!         module::{ModuleBuilder, ModuleEntry},
-//!         function::{FunctionBuilder},
-//!         args::{Arg},
-//!         enums::DataType,
-//!         execution_data::ExecutionData,
-//!         types::{
-//!             zval::Zval,
-//!         },
-//!     },
-//! };
-//!
+//! # use ext_php_rs::{
+//! #     parse_args,
+//! #     php::{
+//! #         module::{ModuleBuilder, ModuleEntry},
+//! #         function::{FunctionBuilder},
+//! #         args::{Arg},
+//! #         enums::DataType,
+//! #         execution_data::ExecutionData,
+//! #         types::{
+//! #             zval::Zval,
+//! #         },
+//! #     },
+//! # };
 //! #[no_mangle]
 //! pub extern "C" fn get_module() -> *mut ModuleEntry {
 //!     let hello_world = FunctionBuilder::new("hello_world", hello_world_func)
@@ -267,6 +265,8 @@
 //! [`FunctionBuilder`]: crate::php::function::FunctionBuilder
 //! [`ClassBuilder`]: crate::php::class::ClassBuilder
 //! [`parse_args!`]: crate::parse_args
+//! [`ZendObjectOverride`]: crate::php::types::object::ZendObjectOverride
+//! [`ZendObjectHandler`]: crate::ZendObjectHandler
 
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
